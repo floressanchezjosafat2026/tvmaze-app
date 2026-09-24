@@ -3,10 +3,12 @@ package com.app.service;
 import com.app.cliente.TvMazeClient;
 import com.app.dto.tvwaze.TvMazeShow;
 import com.app.dto.tvwaze.WazeTvSearchResponse;
-
+import com.app.model.ShowDocument;
+import com.app.repository.ShowRepository;
 import com.app.dto.ResponseSearchDTO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ public class ShowService {
 
 	
 	private final TvMazeClient tvMazeClient;
+	private final ShowRepository showRepository;
 
-	public ShowService(TvMazeClient tvMazeClient) {
+	public ShowService(TvMazeClient tvMazeClient, ShowRepository showRepository) {
 	    this.tvMazeClient = tvMazeClient;
+	    this.showRepository = showRepository;
 	}
 	
 	
@@ -47,4 +51,24 @@ public class ShowService {
 		    }
 		  return results;
 	    }
+	  
+	  public TvMazeShow getShowById(Long showId) {
+
+		    Optional<ShowDocument> cachedShow = showRepository.findById(showId);
+
+		    if (cachedShow.isPresent()) {
+		        return cachedShow.get().getShow();
+		    }
+
+		    TvMazeShow show = tvMazeClient.getShowById(showId);
+
+		    ShowDocument document = new ShowDocument(
+		            show.getId(),
+		            show
+		    );
+
+		    showRepository.save(document);
+
+		    return show;
+		}
 }

@@ -7,6 +7,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import com.app.dto.tvwaze.TvMazeShow;
 import com.app.dto.tvwaze.WazeTvSearchResponse;
 
 
@@ -31,5 +32,13 @@ public class TvMazeClient {
 		                    .build())
 		            .retrieve()
 		            .body(new ParameterizedTypeReference<List<WazeTvSearchResponse>>() {});
+		}
+	 
+	 public TvMazeShow getShowById(Long showId) {
+
+		    return restClient.get()
+		            .uri("/shows/{id}", showId)
+		            .retrieve()
+		            .body(TvMazeShow.class);
 		}
 }
