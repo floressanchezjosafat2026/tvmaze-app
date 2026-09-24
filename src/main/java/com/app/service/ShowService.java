@@ -3,7 +3,9 @@ package com.app.service;
 import com.app.cliente.TvMazeClient;
 import com.app.dto.tvwaze.TvMazeShow;
 import com.app.dto.tvwaze.WazeTvSearchResponse;
+import com.app.model.DocumentoComment;
 import com.app.model.ShowDocument;
+import com.app.repository.CommentRepositoory;
 import com.app.repository.ShowRepository;
 import com.app.dto.ResponseSearchDTO;
 import java.util.ArrayList;
@@ -19,13 +21,15 @@ public class ShowService {
 	
 	private final TvMazeClient tvMazeClient;
 	private final ShowRepository showRepository;
+	private final CommentRepositoory commentRepository;
 
-	public ShowService(TvMazeClient tvMazeClient, ShowRepository showRepository) {
+	public ShowService(TvMazeClient tvMazeClient, ShowRepository showRepository, CommentRepositoory commentRepository) {
 	    this.tvMazeClient = tvMazeClient;
 	    this.showRepository = showRepository;
+	    this.commentRepository = commentRepository;
 	}
 	
-	
+	//Buscar Shows por criterio 
 	  public List<ResponseSearchDTO> searchShows(String query) {
 		 List<WazeTvSearchResponse> responses = tvMazeClient.searchShows(query);
 		 List<ResponseSearchDTO> results = new ArrayList<>();
@@ -51,7 +55,7 @@ public class ShowService {
 		    }
 		  return results;
 	    }
-	  
+	  //Consulta de Shows por Id de busqueda
 	  public TvMazeShow getShowById(Long showId) {
 
 		    Optional<ShowDocument> cachedShow = showRepository.findById(showId);
@@ -71,4 +75,16 @@ public class ShowService {
 
 		    return show;
 		}
+	  
+	  //Metodo de Generacion de Comentarios
+	  public boolean saveComment(Long showId, String comment, Integer rating) {
+	        if (rating < 0 || rating > 5) {
+	            return false;
+	        }
+	        DocumentoComment documentoComment =
+	                new DocumentoComment(showId, comment, rating);
+
+	        commentRepository.save(documentoComment);
+	        return true;
+	    }
 }

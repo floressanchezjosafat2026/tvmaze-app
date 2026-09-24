@@ -2,8 +2,10 @@ package com.app.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +39,21 @@ public class ShowController {
 	public TvMazeShow getShowById(@PathVariable Long showId) {
 
 	    return showService.getShowById(showId);
+	}
+	
+	@PostMapping("/comments")
+	public ResponseEntity<String> saveComment(
+	        @RequestParam("show_id") Long showId,
+	        @RequestParam("comment") String comment,
+	        @RequestParam("rating") Integer rating) {
+
+		boolean guardado = showService.saveComment(showId, comment, rating);
+
+		if (!guardado) {
+		    return ResponseEntity.badRequest().body("El rating debe estar entre 0 y 5");
+		}
+
+		return ResponseEntity.status(201).body("Comentario guardado correctamente");
 	}
 	
 }
