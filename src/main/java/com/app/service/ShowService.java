@@ -85,26 +85,45 @@ public class ShowService {
 	
 	  //Consulta de Shows por Id de busqueda
 	  public TvMazeShow getShowById(Long showId) {
-
+	
 		    Optional<ShowDocument> cachedShow = showRepository.findById(showId);
-
+	
+		    TvMazeShow show;
+	
 		    if (cachedShow.isPresent()) {
-		        return cachedShow.get().getShow();
+		        show = cachedShow.get().getShow();
+		    } else {
+	
+		        show = tvMazeClient.getShowById(showId);
+	
+		        ShowDocument document = new ShowDocument(
+		                show.getId(),
+		                show
+		        );
+	
+		        showRepository.save(document);
 		    }
-
-		    TvMazeShow show = tvMazeClient.getShowById(showId);
-
-		    ShowDocument document = new ShowDocument(
-		            show.getId(),
-		            show
-		    );
-
-		    showRepository.save(document);
-
+	
+		    List<DocumentoComment> comments = commentRepository.findByShowId(showId);
+	
+		    List<CommentResponseDTO> commentResults = new ArrayList<>();
+	
+		    for (DocumentoComment comment : comments) {
+	
+		        CommentResponseDTO commentDTO =
+		                new CommentResponseDTO(
+		                        comment.getComment(),
+		                        comment.getRating()
+		                );
+	
+		        commentResults.add(commentDTO);
+		    }
+	
+		    show.setComments(commentResults);
+	
 		    return show;
 		}
-	  
-	  
+		  
 	  
 	  
 	  

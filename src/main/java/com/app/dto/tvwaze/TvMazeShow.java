@@ -3,6 +3,8 @@ package com.app.dto.tvwaze;
 import java.util.List;
 import java.util.Map;
 
+import com.app.dto.CommentResponseDTO;
+
 public class TvMazeShow {
 
 	
@@ -29,6 +31,7 @@ public class TvMazeShow {
     private Map<String, Object> image;
     private Long updated;
     private Map<String, Object> links;
+    private List<CommentResponseDTO> comments;
 	
 	
 	public Long getId() {
@@ -171,13 +174,19 @@ public class TvMazeShow {
 	public void setLinks(Map<String, Object> links) {
 		this.links = links;
 	}
+	public List<CommentResponseDTO> getComments() {
+		return comments;
+	}
+	public void setComments(List<CommentResponseDTO> comments) {
+		this.comments = comments;
+	}
 	
-
+	
 	public TvMazeShow(Long id, String name, String summary, List<String> genres, TvMazeNetwork network,
 			TvMazeWebChannel webChannel, String url, String type, String language, String status, Integer runtime,
 			Integer averageRuntime, String premiered, String ended, String officialSite, Map<String, Object> schedule,
 			Map<String, Object> rating, Double weight, Map<String, Object> dvdCountry, Map<String, Object> externals,
-			Map<String, Object> image, Long updated, Map<String, Object> links) {
+			Map<String, Object> image, Long updated, Map<String, Object> links, List<CommentResponseDTO> comments) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -202,6 +211,7 @@ public class TvMazeShow {
 		this.image = image;
 		this.updated = updated;
 		this.links = links;
+		this.comments = comments;
 	}
 	
 	
