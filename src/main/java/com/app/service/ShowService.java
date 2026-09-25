@@ -33,15 +33,11 @@ public class ShowService {
 	
 	//Buscar Shows por criterio 
 	public List<ResponseSearchDTO> searchShows(String query) {
-
-	    List<WazeTvSearchResponse> responses = tvMazeClient.searchShows(query);
-
-	    List<ResponseSearchDTO> results = new ArrayList<>();
+           List<WazeTvSearchResponse> responses = tvMazeClient.searchShows(query);
+           List<ResponseSearchDTO> results = new ArrayList<>();
 
 	    for (WazeTvSearchResponse response : responses) {
-
 	        TvMazeShow show = response.getShow();
-
 	        String channel = null;
 
 	        if (show.getNetwork() != null) {
@@ -51,17 +47,14 @@ public class ShowService {
 	        }
 
 	        List<DocumentoComment> comments = commentRepository.findByShowId(show.getId());
-
 	        List<CommentResponseDTO> commentResults = new ArrayList<>();
 
 	        for (DocumentoComment comment : comments) {
-
 	            CommentResponseDTO commentDTO =
 	                    new CommentResponseDTO(
 	                            comment.getComment(),
 	                            comment.getRating()
 	                    );
-
 	            commentResults.add(commentDTO);
 	        }
 
@@ -85,17 +78,13 @@ public class ShowService {
 	
 	  //Consulta de Shows por Id de busqueda
 	  public TvMazeShow getShowById(Long showId) {
-	
 		    Optional<ShowDocument> cachedShow = showRepository.findById(showId);
-	
 		    TvMazeShow show;
 	
 		    if (cachedShow.isPresent()) {
 		        show = cachedShow.get().getShow();
 		    } else {
-	
 		        show = tvMazeClient.getShowById(showId);
-	
 		        ShowDocument document = new ShowDocument(
 		                show.getId(),
 		                show
@@ -105,7 +94,6 @@ public class ShowService {
 		    }
 	
 		    List<DocumentoComment> comments = commentRepository.findByShowId(showId);
-	
 		    List<CommentResponseDTO> commentResults = new ArrayList<>();
 	
 		    for (DocumentoComment comment : comments) {
