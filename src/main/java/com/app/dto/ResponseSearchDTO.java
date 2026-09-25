@@ -8,7 +8,7 @@ public class ResponseSearchDTO {
     private String channel;
     private String summary;
     private List<String> genres;
-    
+    private List<CommentResponseDTO> comments;
     
 	public Long getId() {
 		return id;
@@ -41,12 +41,22 @@ public class ResponseSearchDTO {
 		this.genres = genres;
 	}
 	
-	public ResponseSearchDTO(Long id, String name, String channel, String summary, List<String> genres) {
+	
+	public ResponseSearchDTO(Long id, String name, String channel, String summary, List<String> genres, List<CommentResponseDTO> comments) {
 		this.id = id;
 		this.name = name;
 		this.channel = channel;
 		this.summary = summary;
 		this.genres = genres;
+		this.comments = comments;
+	}
+	
+	
+	public List<CommentResponseDTO> getComments() {
+		return comments;
+	}
+	public void setComments(List<CommentResponseDTO> comments) {
+		this.comments = comments;
 	}
 	
 	
